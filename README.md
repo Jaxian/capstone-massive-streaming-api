@@ -19,10 +19,7 @@ The primary objectives of this project are:
 
 ## System Architecture
 
----
-config:
-  layout: elk
----
+```mermaid
 flowchart TB
  subgraph s1["Fastify Core & Documentation"]
         Scalar["Scalar API Reference UI"]
@@ -44,6 +41,7 @@ flowchart TB
     Queue -- Persists Job Data --> Redis
     Redis -- Pulls Job via Consumer --> Worker
     Worker -- Processes heavy payload asynchronously --> BackgroundTask
+---
 
 ## Project Structure
 
@@ -65,26 +63,26 @@ tests/
 
 ## Getting Started
 
-- Prerequisites
+1. **Prerequisites
 Node.js (v18+ recommended)
 Docker (for running a local Redis instance)
 
-- Installation & Setup
+2. **Installation & Setup
 Clone the repository:
 
 git clone [https://github.com/Jaxian/capstone-massive-streaming-api.git](https://github.com/Jaxian/capstone-massive-streaming-api.git)
 cd capstone-massive-streaming-api
 
-- Install dependencies:
+3. **Install dependencies:
 npm install
 
-- Start Redis (via Docker):
+4. **Start Redis (via Docker):
 docker run -d --name redis-capstone -p 6379:6379 redis:alpine
 
-- Run the application in development mode:
+5. **Run the application in development mode:
 npm run dev
 
-- Start the background worker (in a separate terminal):
+6. **Start the background worker (in a separate terminal):
 npm run worker
 
 ## API Documentation
@@ -96,17 +94,11 @@ Execute the automated test suite using Jest:
 npm test
 
 ## Tech Stack
-Runtime: Node.js
-
-Language: TypeScript (Strict Mode)
-
-Web Framework: Fastify
-
-File Upload Handling: @fastify/multipart
-
-Queue & Background Processing: BullMQ & ioredis
-
-API Documentation: @fastify/swagger & @scalar/fastify-api-reference
-
-Testing: Jest & Supertest
+- Runtime: Node.js
+- Language: TypeScript (Strict Mode)
+- Web Framework: Fastify
+- File Upload Handling: @fastify/multipart
+- Queue & Background Processing: BullMQ & ioredis
+- API Documentation: @fastify/swagger & @scalar/fastify-api-reference
+- Testing: Jest & Supertest
 
