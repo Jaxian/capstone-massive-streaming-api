@@ -110,7 +110,7 @@ Once the server is running, you can access the interactive **Scalar** API docume
 
 ---
 
-## 🧪 Running Tests
+## Running Tests
 
 Execute the automated test suite using Jest:
 ```bash
