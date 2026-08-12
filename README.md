@@ -41,6 +41,8 @@ flowchart TB
     Queue -- Persists Job Data --> Redis
     Redis -- Pulls Job via Consumer --> Worker
     Worker -- Processes heavy payload asynchronously --> BackgroundTask
+
+
 ---
 
 ## Project Structure
@@ -60,6 +62,8 @@ src/
 └── server.ts                 # Fastify instance bootstrap & plugin registration
 tests/
     └── upload.test.ts        # Supertest integration tests with mocked BullMQ
+
+---
 
 ## Getting Started
 
