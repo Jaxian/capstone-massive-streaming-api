@@ -1,6 +1,6 @@
 # Capstone Massive Streaming API
 
-A high-performance, Node.js backend application built with **Fastify**, **TypeScript**, **BullMQ**, **Redis**, and **Scalar**. This project serves as a Capstone implementation demonstrating memory protection via native streams, and asynchronous background task offloading.
+A high-performance, Node.js backend application built with **Fastify**, **TypeScript**, **BullMQ**, **Redis**, and **Scalar**. This project serves as a Capstone implementation demonstrating an architecture with memory protection via native streams, and asynchronous background task offloading.
 
 ---
 
@@ -20,17 +20,17 @@ The primary objectives of this project are:
 ## System Architecture
 
 ```mermaid
-flowchart TB
- subgraph s1["Fastify Core & Documentation"]
+graph TB
+    subgraph s1["Fastify Core & Documentation"]
         Scalar["Scalar API Reference UI"]
         Fastify["Fastify Server"]
         Controller["Upload Controller"]
-  end
- subgraph s2["Asynchronous Worker"]
+    end
+    subgraph s2["Asynchronous Worker"]
         Worker["BullMQ Worker"]
         Redis[("Redis Database")]
         BackgroundTask["Massive Data Parsing / CPU Task"]
-  end
+    end
     Client["Client / Frontend"] -- "HTTP POST /api/upload (multipart/form-data)" --> Fastify
     Fastify -- OpenAPI / Swagger --> Scalar
     Fastify -- Route & Schema Validation --> Controller
@@ -41,12 +41,13 @@ flowchart TB
     Queue -- Persists Job Data --> Redis
     Redis -- Pulls Job via Consumer --> Worker
     Worker -- Processes heavy payload asynchronously --> BackgroundTask
-
+```
 
 ---
 
 ## Project Structure
 
+```text
 src/
 ├── config/
 │   └── redis.config.ts       # Strict Redis configuration for BullMQ
@@ -62,47 +63,68 @@ src/
 └── server.ts                 # Fastify instance bootstrap & plugin registration
 tests/
     └── upload.test.ts        # Supertest integration tests with mocked BullMQ
+```
 
 ---
 
-## Getting Started
+## Setting Started
 
-1. **Prerequisites
-Node.js (v18+ recommended)
-Docker (for running a local Redis instance)
+### Prerequisites
+* Node.js (v18+ recommended)
+* Docker (for running a local Redis instance)
 
-2. **Installation & Setup
-Clone the repository:
+### Installation & Setup
 
-git clone [https://github.com/Jaxian/capstone-massive-streaming-api.git](https://github.com/Jaxian/capstone-massive-streaming-api.git)
-cd capstone-massive-streaming-api
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/Jaxian/capstone-massive-streaming-api.git](https://github.com/Jaxian/capstone-massive-streaming-api.git)
+   cd capstone-massive-streaming-api
+   ```
 
-3. **Install dependencies:
-npm install
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-4. **Start Redis (via Docker):
-docker run -d --name redis-capstone -p 6379:6379 redis:alpine
+3. **Start Redis (via Docker):**
+   ```bash
+   docker run -d --name redis-capstone -p 6379:6379 redis:alpine
+   ```
 
-5. **Run the application in development mode:
-npm run dev
+4. **Run the application in development mode:**
+   ```bash
+   npm run dev
+   ```
 
-6. **Start the background worker (in a separate terminal):
-npm run worker
+5. **Start the background worker (in a separate terminal):**
+   ```bash
+   npm run worker
+   ```
+
+---
 
 ## API Documentation
-Once the server is running, you can access the interactive Scalar API documentation interface at:
-http://localhost:3000/reference
 
-## Running Tests
+Once the server is running, you can access the interactive **Scalar** API documentation interface at:
+**[http://localhost:3000/reference](http://localhost:3000/reference)**
+
+---
+
+## 🧪 Running Tests
+
 Execute the automated test suite using Jest:
+```bash
 npm test
+```
+
+---
 
 ## Tech Stack
-- Runtime: Node.js
-- Language: TypeScript (Strict Mode)
-- Web Framework: Fastify
-- File Upload Handling: @fastify/multipart
-- Queue & Background Processing: BullMQ & ioredis
-- API Documentation: @fastify/swagger & @scalar/fastify-api-reference
-- Testing: Jest & Supertest
 
+* **Runtime**: Node.js
+* **Language**: TypeScript (Strict Mode)
+* **Web Framework**: Fastify
+* **File Upload Handling**: `@fastify/multipart`
+* **Queue & Background Processing**: BullMQ & ioredis
+* **API Documentation**: `@fastify/swagger` & `@scalar/fastify-api-reference`
+* **Testing**: Jest & Supertest
