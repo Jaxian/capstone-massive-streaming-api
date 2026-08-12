@@ -1,6 +1,6 @@
-# Capstone Massive Streaming API 🚀
+# Capstone Massive Streaming API
 
-A high-performance, enterprise-grade Node.js backend application built with **Fastify**, **TypeScript**, **BullMQ**, **Redis**, and **Scalar**. This project serves as a Capstone implementation demonstrating Senior-level backend architecture, memory protection via native streams, and asynchronous background task offloading.
+A high-performance, Node.js backend application built with **Fastify**, **TypeScript**, **BullMQ**, **Redis**, and **Scalar**. This project serves as a Capstone implementation demonstrating memory protection via native streams, and asynchronous background task offloading.
 
 ---
 
@@ -19,29 +19,31 @@ The primary objectives of this project are:
 
 ## System Architecture
 
-```mermaid
-graph TD
-    Client[Client / Frontend] -->|HTTP POST /api/upload (multipart/form-data)| Fastify[Fastify Server]
-    
-    subgraph Fastify Application [Fastify Core & Documentation]
-        Fastify -->|OpenAPI / Swagger| Scalar[Scalar API Reference UI at /reference]
-        Fastify -->|Route & Schema Validation| Controller[Upload Controller]
-    end
-
-    Controller -->|Native Streams Pipeline| StreamService[Stream Service]
-    StreamService -->|Streams file chunks safely| Disk[(Local Disk / Uploads Directory)]
-
-    Controller -->|Dispatches Job (Offloading)| Queue[BullMQ Producer / fileQueue]
-    Controller -->|HTTP 202 Accepted response| Client
-
-    Queue -->|Persists Job Data| Redis[(Redis In-Memory Database)]
-    
-    subgraph Background Processing [Asynchronous Worker]
-        Redis -->|Pulls Job via Consumer| Worker[BullMQ Worker / Process Worker]
-        Worker -->|Processes heavy payload asynchronously| BackgroundTask[Massive Data Parsing / CPU Task]
-    end
-
 ---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph s1["Fastify Core & Documentation"]
+        Scalar["Scalar API Reference UI"]
+        Fastify["Fastify Server"]
+        Controller["Upload Controller"]
+  end
+ subgraph s2["Asynchronous Worker"]
+        Worker["BullMQ Worker"]
+        Redis[("Redis Database")]
+        BackgroundTask["Massive Data Parsing / CPU Task"]
+  end
+    Client["Client / Frontend"] -- "HTTP POST /api/upload (multipart/form-data)" --> Fastify
+    Fastify -- OpenAPI / Swagger --> Scalar
+    Fastify -- Route & Schema Validation --> Controller
+    Controller -- Native Streams Pipeline --> StreamService["Stream Service"]
+    StreamService -- Streams file chunks safely --> Disk[("Local Disk / Uploads Directory")]
+    Controller -- Dispatches Job (Offloading) --> Queue["BullMQ Producer"]
+    Controller -- HTTP 202 Accepted response --> Client
+    Queue -- Persists Job Data --> Redis
+    Redis -- Pulls Job via Consumer --> Worker
+    Worker -- Processes heavy payload asynchronously --> BackgroundTask
 
 ## Project Structure
 
@@ -63,9 +65,8 @@ tests/
 
 ## Getting Started
 
-Prerequisites
+- Prerequisites
 Node.js (v18+ recommended)
-
 Docker (for running a local Redis instance)
 
 - Installation & Setup
